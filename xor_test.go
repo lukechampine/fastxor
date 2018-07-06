@@ -56,8 +56,10 @@ func refBlock(dst, a, b []byte) {
 
 func TestBytes(t *testing.T) {
 	err := quick.Check(func(a, b []byte) bool {
-		// double size to increase chances of reaching 64 bytes
+		// quadruple size to increase coverage
 		a = append(a, a...)
+		a = append(a, a...)
+		b = append(b, b...)
 		b = append(b, b...)
 		if len(a) < 8 {
 			return true
@@ -72,7 +74,17 @@ func TestBytes(t *testing.T) {
 		return bytes.Equal(dst1, dst2)
 	}, &quick.Config{MaxCount: 10000})
 	if err != nil {
-		t.Fatal(err)
+		t.Error(err)
+	}
+
+	// test a large slice
+	a := make([]byte, 512-1)
+	for i := range a {
+		a[i] = byte(i)
+	}
+	Bytes(a, a, a)
+	if !bytes.Equal(a, make([]byte, len(a))) {
+		t.Error("bad xor of large slice")
 	}
 }
 
