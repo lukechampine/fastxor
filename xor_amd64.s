@@ -116,36 +116,62 @@ TEXT ·xorBytesAVX(SB),NOSPLIT,$0
 	MOVQ b_data+48(FP), B
 	MOVQ n+72(FP), N
 
+XOR_LOOP_256_AVX:
+	CMPQ   N, $256
+	JB     XOR_LOOP_128_AVX
+
+	VMOVDQU     (A), Y0
+	VMOVDQU   32(A), Y1
+	VMOVDQU   64(A), Y2
+	VMOVDQU   96(A), Y3
+	VMOVDQU  128(A), Y4
+	VMOVDQU  160(A), Y5
+	VMOVDQU  192(A), Y6
+	VMOVDQU  224(A), Y7
+
+	VPXOR     (B), Y0, Y0
+	VPXOR   32(B), Y1, Y1
+	VPXOR   64(B), Y2, Y2
+	VPXOR   96(B), Y3, Y3
+	VPXOR  128(B), Y4, Y4
+	VPXOR  160(B), Y5, Y5
+	VPXOR  192(B), Y6, Y6
+	VPXOR  224(B), Y7, Y7
+
+	VMOVDQU   Y0,    (Dst)
+	VMOVDQU   Y1,  32(Dst)
+	VMOVDQU   Y2,  64(Dst)
+	VMOVDQU   Y3,  96(Dst)
+	VMOVDQU   Y4, 128(Dst)
+	VMOVDQU   Y5, 160(Dst)
+	VMOVDQU   Y6, 192(Dst)
+	VMOVDQU   Y7, 224(Dst)
+
+	ADDQ   $256, A
+	ADDQ   $256, B
+	ADDQ   $256, Dst
+	SUBQ   $256, N
+	JNZ    XOR_LOOP_256_AVX
+	RET
+
 XOR_LOOP_128_AVX:
 	CMPQ   N, $128
 	JB     XOR_LOOP_64_AVX
 
-	VMOVDQU     (A), X0
-	VMOVDQU   16(A), X1
-	VMOVDQU   32(A), X2
-	VMOVDQU   48(A), X3
-	VMOVDQU   64(A), X4
-	VMOVDQU   80(A), X5
-	VMOVDQU   96(A), X6
-	VMOVDQU  112(A), X7
+	VMOVDQU     (A), Y0
+	VMOVDQU   32(A), Y1
+	VMOVDQU   64(A), Y2
+	VMOVDQU   96(A), Y3
 
-	VPXOR     (B), X0, X0
-	VPXOR   16(B), X1, X1
-	VPXOR   32(B), X2, X2
-	VPXOR   48(B), X3, X3
-	VPXOR   64(B), X4, X4
-	VPXOR   80(B), X5, X5
-	VPXOR   96(B), X6, X6
-	VPXOR  112(B), X7, X7
+	VPXOR     (B), Y0, Y0
+	VPXOR   32(B), Y1, Y1
+	VPXOR   64(B), Y2, Y2
+	VPXOR   96(B), Y3, Y3
 
-	VMOVDQU   X0,    (Dst)
-	VMOVDQU   X1,  16(Dst)
-	VMOVDQU   X2,  32(Dst)
-	VMOVDQU   X3,  48(Dst)
-	VMOVDQU   X4,  64(Dst)
-	VMOVDQU   X5,  80(Dst)
-	VMOVDQU   X6,  96(Dst)
-	VMOVDQU   X7, 112(Dst)
+	VMOVDQU   Y0,    (Dst)
+	VMOVDQU   Y1,  32(Dst)
+	VMOVDQU   Y2,  64(Dst)
+	VMOVDQU   Y3,  96(Dst)
 
 	ADDQ   $128, A
 	ADDQ   $128, B
@@ -158,20 +184,14 @@ XOR_LOOP_64_AVX:
 	CMPQ   N, $64
 	JB     XOR_LOOP_16_AVX
 
-	MOVOU    (A), X0
-	MOVOU  16(A), X1
-	MOVOU  32(A), X2
-	MOVOU  48(A), X3
+	VMOVDQU    (A), Y0
+	VMOVDQU  32(A), Y1
 
-	VPXOR    (B), X0, X4
-	VPXOR  16(B), X1, X5
-	VPXOR  32(B), X2, X6
-	VPXOR  48(B), X3, X7
+	VPXOR    (B), Y0, Y2
+	VPXOR  32(B), Y1, Y3
 
-	VMOVDQU  X4,   (Dst)
-	VMOVDQU  X5, 16(Dst)
-	VMOVDQU  X6, 32(Dst)
-	VMOVDQU  X7, 48(Dst)
+	VMOVDQU  Y2,   (Dst)
+	VMOVDQU  Y3, 32(Dst)
 
 	ADDQ   $64, A
 	ADDQ   $64, B
