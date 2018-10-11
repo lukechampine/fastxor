@@ -97,9 +97,9 @@ func Byte(dst, a []byte, b byte) int {
 func Block(dst, a, b []byte) {
 	// profiling indicates that for 16-byte blocks, the cost of a function
 	// call outweighs the SSE/AVX speedup
-	dw := *(*[]uintptr)(unsafe.Pointer(&dst))
-	aw := *(*[]uintptr)(unsafe.Pointer(&a))
-	bw := *(*[]uintptr)(unsafe.Pointer(&b))
+	dw := (*[2]uintptr)(unsafe.Pointer(&dst[0]))
+	aw := (*[2]uintptr)(unsafe.Pointer(&a[0]))
+	bw := (*[2]uintptr)(unsafe.Pointer(&b[0]))
 	dw[0] = aw[0] ^ bw[0]
 	dw[1] = aw[1] ^ bw[1]
 }

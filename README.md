@@ -53,9 +53,9 @@ roughly twice as fast as SSE, which is unsurpising since it can operate on
 twice as many bits per cycle. Lastly, for very small slices, the cost of the
 function call starts to outweigh the benefit of AVX/SSE (the Go compiler never
 inlines handwritten asm). If you need to xor exactly 16 bytes (common in block
-ciphers), the specialized `Block` function outperforms the more generic
-`Bytes`:
+ciphers), the specialized `Block` function is about 6 times faster than the
+more generic `Bytes`:
 
 ```
-BenchmarkBlock-4    	1000000000	        2.72 ns/op	 5888.02 MB/s
+BenchmarkBlock-4      	2000000000	        1.18 ns/op	13546.30 MB/s
 ```

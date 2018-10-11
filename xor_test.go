@@ -181,10 +181,12 @@ func BenchmarkRefByte(b *testing.B) {
 }
 
 func BenchmarkBlock(b *testing.B) {
-	buf := make([]byte, 16)
+	dst := make([]byte, 16)
+	bufA := make([]byte, 16)
+	bufB := make([]byte, 16)
 	b.SetBytes(16)
 	for i := 0; i < b.N; i++ {
-		Block(buf, buf, buf)
+		Block(dst, bufA, bufB)
 	}
 }
 
