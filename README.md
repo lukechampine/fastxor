@@ -49,7 +49,7 @@ BenchmarkBytes/65k-4   	    50000	     38906 ns/op	 1684.45 MB/s
 ```
 
 Conclusions: `fastxor` is 2-40 times faster than a naive `for` loop. AVX is
-roughly twice as fast as SSE, which is unsurpising since it can operate on
+roughly twice as fast as SSE, which is unsurprising since it can operate on
 twice as many bits per cycle. Lastly, for very small slices, the cost of the
 function call starts to outweigh the benefit of AVX/SSE (the Go compiler never
 inlines handwritten asm). If you need to xor exactly 16 bytes (common in block
