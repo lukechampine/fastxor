@@ -12,6 +12,9 @@ func Bytes(dst, a, b []byte) int {
 	if len(dst) < n {
 		n = len(dst)
 	}
+	_ = dst[n-1]
+	_ = a[n-1]
+	_ = b[n-1]
 	for i := 0; i < n; i++ {
 		dst[i] = a[i] ^ b[i]
 	}
@@ -26,6 +29,8 @@ func Byte(dst, a []byte, b byte) int {
 	if len(dst) < n {
 		n = len(dst)
 	}
+	_ = dst[n-1]
+	_ = a[n-1]
 	for i := 0; i < n; i++ {
 		dst[i] = a[i] ^ b
 	}

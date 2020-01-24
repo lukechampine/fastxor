@@ -53,11 +53,17 @@ func xorBytesGeneric(dst, a, b []byte, n int) {
 		dw := *(*[]uintptr)(unsafe.Pointer(&dst))
 		aw := *(*[]uintptr)(unsafe.Pointer(&a))
 		bw := *(*[]uintptr)(unsafe.Pointer(&b))
+		_ = aw[w-1]
+		_ = bw[w-1]
+		_ = dw[w-1]
 		for i := 0; i < w; i++ {
 			dw[i] = aw[i] ^ bw[i]
 		}
 	}
 
+	_ = dst[n-1]
+	_ = a[n-1]
+	_ = b[n-1]
 	for i := (n - n%wordSize); i < n; i++ {
 		dst[i] = a[i] ^ b[i]
 	}
@@ -81,11 +87,15 @@ func Byte(dst, a []byte, b byte) int {
 	if w > 0 {
 		dw := *(*[]uintptr)(unsafe.Pointer(&dst))
 		aw := *(*[]uintptr)(unsafe.Pointer(&a))
+		_ = aw[w-1]
+		_ = dw[w-1]
 		for i := 0; i < w; i++ {
 			dw[i] = aw[i] ^ bw
 		}
 	}
 
+	_ = dst[n-1]
+	_ = a[n-1]
 	for i := (n - n%wordSize); i < n; i++ {
 		dst[i] = a[i] ^ b
 	}
