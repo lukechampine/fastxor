@@ -12,6 +12,9 @@ func Bytes(dst, a, b []byte) int {
 	if len(dst) < n {
 		n = len(dst)
 	}
+	if n == 0 {
+		return n
+	}
 	_ = dst[n-1]
 	_ = a[n-1]
 	_ = b[n-1]
@@ -28,6 +31,9 @@ func Byte(dst, a []byte, b byte) int {
 	n := len(a)
 	if len(dst) < n {
 		n = len(dst)
+	}
+	if n == 0 {
+		return n
 	}
 	_ = dst[n-1]
 	_ = a[n-1]
