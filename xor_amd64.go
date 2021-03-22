@@ -12,7 +12,7 @@ import (
 func xorBytesSSE(dst, a, b []byte, n int)
 
 //go:noescape
-func xorBytesAVX(dst, a, b []byte, n int)
+func xorBytesAVX2(dst, a, b []byte, n int)
 
 func min(a, b, c int) int {
 	if a < b {
@@ -32,8 +32,8 @@ func Bytes(dst, a, b []byte) int {
 		return 0
 	}
 	switch {
-	case cpu.X86.HasAVX:
-		xorBytesAVX(dst, a, b, n)
+	case cpu.X86.HasAVX2:
+		xorBytesAVX2(dst, a, b, n)
 	case cpu.X86.HasSSE2:
 		xorBytesSSE(dst, a, b, n)
 	default:

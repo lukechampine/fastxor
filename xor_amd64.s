@@ -71,8 +71,8 @@ XOR_LOOP_FINAL_SSE:
 	RET
 
 
-// func xorBytesAVX(dst, a, b []byte, n int)
-TEXT ·xorBytesAVX(SB), NOSPLIT ,$0
+// func xorBytesAVX2(dst, a, b []byte, n int)
+TEXT ·xorBytesAVX2(SB), NOSPLIT ,$0
 	MOVQ dst_data+0(FP), Dst
 	MOVQ a_data+24(FP), A
 	MOVQ b_data+48(FP), B
